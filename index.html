@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sleepy — Minecraft Content Creator</title>
+  <meta name="description" content="Sleepy is a Minecraft content creator making builds, survival series and challenges on YouTube & TikTok." />
+  <link rel="stylesheet" href="css/global.css" />
+  <style>
+    /* ---- HERO ---- */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    #heroCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,245,255,0.08);
+      border: 1px solid rgba(0,245,255,0.3);
+      border-radius: 999px;
+      padding: 6px 18px;
+      font-size: 0.8rem;
+      font-family: var(--font-pixel);
+      color: var(--neon-cyan);
+      text-shadow: 0 0 10px var(--neon-cyan);
+      margin-bottom: 28px;
+      animation: fadeInUp 0.7s ease both;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 8px; height: 8px;
+      background: var(--neon-green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--neon-green);
+      animation: blink 1.4s steps(1) infinite;
+    }
+
+    .hero-name {
+      font-size: clamp(3.2rem, 9vw, 7rem);
+      font-weight: 800;
+      font-family: var(--font-display);
+      line-height: 1;
+      color: #fff;
+      animation: fadeInUp 0.7s 0.1s ease both;
+      letter-spacing: -1px;
+    }
+
+    .hero-name .glow {
+      color: var(--neon-cyan);
+      text-shadow:
+        0 0 20px var(--neon-cyan),
+        0 0 60px rgba(0,245,255,0.4),
+        0 0 120px rgba(0,245,255,0.15);
+    }
+
+    .hero-sub {
+      font-family: var(--font-pixel);
+      font-size: 0.72rem;
+      color: var(--neon-blue);
+      letter-spacing: 3px;
+      margin: 16px 0 24px;
+      animation: fadeInUp 0.7s 0.2s ease both;
+      text-transform: uppercase;
+    }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 540px;
+      line-height: 1.8;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.7s 0.3s ease both;
+    }
+
+    .hero-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      animation: fadeInUp 0.7s 0.4s ease both;
+    }
+
+    /* Floating pixel blocks */
+    .pixel-block {
+      position: absolute;
+      border-radius: 4px;
+      opacity: 0.12;
+      animation: floatY linear infinite;
+    }
+
+    .pixel-block:nth-child(1) { width:28px;height:28px;background:var(--neon-cyan);  top:15%;right:8%;  animation-duration:6s; }
+    .pixel-block:nth-child(2) { width:16px;height:16px;background:var(--neon-blue);  top:40%;right:18%; animation-duration:8s;animation-delay:1s; }
+    .pixel-block:nth-child(3) { width:20px;height:20px;background:var(--neon-green); top:70%;right:5%;  animation-duration:7s;animation-delay:2s; }
+    .pixel-block:nth-child(4) { width:12px;height:12px;background:var(--neon-purple);top:25%;right:32%; animation-duration:9s;animation-delay:0.5s; }
+    .pixel-block:nth-child(5) { width:24px;height:24px;background:var(--neon-cyan);  top:55%;right:28%; animation-duration:5s;animation-delay:3s; }
+
+    /* Scan line effect on hero */
+    .hero-scan {
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(0,245,255,0.2), transparent);
+      top: 0;
+      animation: scanLine 6s linear infinite;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    /* ---- STATS ---- */
+    .stats-bar {
+      position: relative;
+      z-index: 1;
+      padding: 0 0 70px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 28px 20px;
+    }
+
+    .stat-icon {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 15px rgba(0,245,255,0.5);
+      display: block;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      margin-top: 6px;
+      display: block;
+    }
+
+    /* ---- FEATURED ---- */
+    .featured-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .vid-thumb-wrap {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      aspect-ratio: 16/9;
+      background: var(--dark-blue);
+    }
+
+    .vid-thumb-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .card:hover .vid-thumb-wrap img {
+      transform: scale(1.06);
+    }
+
+    .vid-play {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(5,8,16,0.35);
+      transition: background 0.3s;
+    }
+
+    .vid-play-icon {
+      width: 52px; height: 52px;
+      background: rgba(0,0,0,0.7);
+      border: 2px solid rgba(255,255,255,0.5);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #fff;
+      transition: all 0.25s;
+      padding-left: 4px;
+    }
+
+    .card:hover .vid-play-icon {
+      background: var(--neon-blue);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0,128,255,0.5);
+      transform: scale(1.1);
+    }
+
+    .vid-category {
+      position: absolute;
+      top: 10px; left: 10px;
+      background: rgba(0,128,255,0.8);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    .vid-info { padding-top: 14px; }
+
+    .vid-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .vid-meta {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .vid-meta span { margin-right: 12px; }
+
+    /* ---- PLATFORM CTA ---- */
+    .platform-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .platform-card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .platform-icon {
+      font-size: 2.4rem;
+      line-height: 1;
+    }
+
+    .platform-name {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .platform-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .featured-grid { grid-template-columns: 1fr; }
+      .platform-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- HERO -->
+  <section class="hero">
+    <canvas id="heroCanvas"></canvas>
+    <div class="hero-scan"></div>
+
+    <div class="pixel-block"></div>
+    <div class="pixel-block"></div>
+    <div class="pixel-block"></div>
+    <div class="pixel-block"></div>
+    <div class="pixel-block"></div>
+
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">⛏ LIVE &amp; CREATING</div>
+        <h1 class="hero-name">I'm <span class="glow" id="heroName">Sleepy</span></h1>
+        <p class="hero-sub">Minecraft Content Creator</p>
+        <p class="hero-desc" id="heroDesc">Loading...</p>
+        <div class="hero-btns" id="heroBtns">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-bar">
+    <div class="container">
+      <div class="stats-grid" id="statsGrid">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED VIDEOS -->
+  <section class="section">
+    <div class="container">
+      <p style="color:var(--neon-cyan);font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:0.82rem;margin-bottom:6px;">LATEST CONTENT</p>
+      <h2 class="section-title reveal">Featured <span>Videos</span></h2>
+      <div class="section-divider"></div>
+      <p class="section-subtitle reveal delay-1">Check out my most popular uploads — new content every week.</p>
+
+      <div class="featured-grid" id="featuredGrid">
+        <!-- Injected by JS -->
+      </div>
+
+      <div style="text-align:center;margin-top:40px;" class="reveal">
+        <a href="videos.html" class="btn btn-outline">View All Videos →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLATFORM CTA -->
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <p style="color:var(--neon-cyan);font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:0.82rem;margin-bottom:6px;">FOLLOW THE JOURNEY</p>
+      <h2 class="section-title reveal">Find Me <span>Online</span></h2>
+      <div class="section-divider"></div>
+      <p class="section-subtitle reveal delay-1">Hit that subscribe button and never miss a drop.</p>
+
+      <div class="platform-row" id="platformRow">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-wrapper -->
+
+<script src="js/shared.js"></script>
+<script>
+(async () => {
+  await injectNav('Home');
+  await injectFooter();
+  initParticles('heroCanvas');
+  initReveal();
+
+  const data = await loadSiteData();
+  if (!data) return;
+
+  // Hero
+  document.getElementById('heroDesc').textContent = data.creator.bio;
+  document.getElementById('heroBtns').innerHTML = `
+    <a href="${data.socials.youtube.url}" target="_blank" class="btn btn-yt">▶ YouTube</a>
+    <a href="${data.socials.tiktok.url}" target="_blank" class="btn btn-tt">♪ TikTok</a>
+    <a href="about.html" class="btn btn-outline">About Me</a>
+  `;
+
+  // Stats
+  const sg = document.getElementById('statsGrid');
+  sg.innerHTML = data.stats.map((s,i) => `
+    <div class="card stat-card reveal delay-${i+1}">
+      <span class="stat-icon">${s.icon}</span>
+      <span class="stat-value" data-target="${s.value}">${s.value}</span>
+      <span class="stat-label">${s.label}</span>
+    </div>
+  `).join('');
+
+  // Count-up after reveal
+  setTimeout(() => {
+    document.querySelectorAll('.stat-value').forEach(el => {
+      countUp(el, el.dataset.target);
+    });
+  }, 400);
+
+  // Featured videos (first 2)
+  const fg = document.getElementById('featuredGrid');
+  fg.innerHTML = data.videos.slice(0, 2).map((v, i) => `
+    <a href="${v.url}" target="_blank" class="card reveal delay-${i+1}" style="text-decoration:none;">
+      <div class="vid-thumb-wrap">
+        <img src="${v.thumbnail}" alt="${v.title}" loading="lazy" onerror="this.src='https://placehold.co/640x360/0a0f2c/00f5ff?text=Sleepy'">
+        <div class="vid-play"><div class="vid-play-icon">▶</div></div>
+        <div class="vid-category">${v.category}</div>
+      </div>
+      <div class="vid-info">
+        <div class="vid-title">${v.title}</div>
+        <div class="vid-meta">
+          <span>👁 ${v.views}</span>
+          <span>🕐 ${v.date}</span>
+        </div>
+      </div>
+    </a>
+  `).join('');
+
+  // Platform CTA
+  const pr = document.getElementById('platformRow');
+  pr.innerHTML = `
+    <div class="card platform-card reveal delay-1">
+      <div class="platform-icon">📺</div>
+      <div class="platform-name">YouTube</div>
+      <p class="platform-desc">Long-form builds, survival series and Minecraft challenges posted regularly.</p>
+      <a href="${data.socials.youtube.url}" target="_blank" class="btn btn-yt">▶ Subscribe</a>
+    </div>
+    <div class="card platform-card reveal delay-2">
+      <div class="platform-icon">🎵</div>
+      <div class="platform-name">TikTok</div>
+      <p class="platform-desc">Short clips, highlights and behind-the-scenes moments from my Minecraft world.</p>
+      <a href="${data.socials.tiktok.url}" target="_blank" class="btn btn-tt">♪ Follow</a>
+    </div>
+  `;
+
+  initReveal();
+})();
+</script>
+</body>
+</html>
