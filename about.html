@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Sleepy</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <style>
+    .about-hero {
+      padding: 110px 0 70px;
+      text-align: center;
+      position: relative;
+    }
+
+    .about-hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 200px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+    }
+
+    .avatar-wrap {
+      display: inline-flex;
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .avatar-ring {
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue), var(--neon-purple)) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      animation: glowPulse 2.5s ease infinite;
+    }
+
+    .avatar {
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--dark-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+
+    .avatar-emoji {
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--dark-blue), var(--navy));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      border: 2px solid var(--border);
+    }
+
+    /* ---- ABOUT LAYOUT ---- */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      font-size: 1.05rem;
+      line-height: 1.85;
+    }
+
+    .about-text p strong {
+      color: var(--text-main);
+    }
+
+    /* ---- SKILLS / CONTENT TYPES ---- */
+    .content-types {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 24px 0;
+    }
+
+    .tag {
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      font-family: var(--font-body);
+      border: 1px solid;
+      transition: all 0.2s;
+    }
+
+    .tag-cyan  { border-color: var(--neon-cyan); color: var(--neon-cyan); background: rgba(0,245,255,0.07); }
+    .tag-blue  { border-color: var(--neon-blue); color: var(--neon-blue); background: rgba(0,128,255,0.07); }
+    .tag-green { border-color: var(--neon-green);color: var(--neon-green);background: rgba(57,255,20,0.07);  }
+    .tag-purple{ border-color: var(--neon-purple);color:var(--neon-purple);background: rgba(191,0,255,0.07); }
+
+    .tag:hover { transform: translateY(-2px); }
+
+    /* ---- INFO CARD ---- */
+    .info-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+
+    .info-list li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: rgba(13,27,75,0.4);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.95rem;
+    }
+
+    .info-icon {
+      font-size: 1.3rem;
+      min-width: 28px;
+      text-align: center;
+    }
+
+    .info-label { color: var(--text-muted); font-size: 0.8rem; display: block; }
+    .info-value { color: var(--text-main); font-weight: 600; }
+
+    /* ---- TIMELINE ---- */
+    .timeline { position: relative; padding-left: 28px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; left: 6px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--neon-cyan), var(--neon-blue), transparent);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 36px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -26px;
+      top: 5px;
+      width: 12px; height: 12px;
+      border-radius: 2px;
+      background: var(--neon-cyan);
+      box-shadow: 0 0 10px var(--neon-cyan);
+    }
+
+    .timeline-year {
+      font-family: var(--font-pixel);
+      font-size: 0.65rem;
+      color: var(--neon-cyan);
+      margin-bottom: 6px;
+    }
+
+    .timeline-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 5px;
+    }
+
+    .timeline-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- HERO -->
+  <div class="about-hero">
+    <div class="container">
+      <div class="avatar-wrap reveal">
+        <div class="avatar-ring"></div>
+        <div class="avatar-emoji">🎮</div>
+      </div>
+      <h1 class="section-title reveal delay-1">About <span>Me</span></h1>
+      <div class="section-divider" style="margin:14px auto 0;"></div>
+    </div>
+  </div>
+
+  <!-- ABOUT SECTION -->
+  <section class="section" style="padding-top:60px;">
+    <div class="container">
+      <div class="about-grid">
+
+        <!-- LEFT: Text -->
+        <div class="about-text">
+          <p style="color:var(--neon-cyan);font-weight:700;letter-spacing:2px;font-size:0.8rem;text-transform:uppercase;margin-bottom:8px;">WHO AM I?</p>
+          <h2 class="section-title reveal" style="margin-bottom:20px;">Hey, I'm <span>Sleepy</span> 👋</h2>
+          <div class="section-divider"></div>
+
+          <p class="reveal delay-1" id="longBio">Loading...</p>
+
+          <p class="reveal delay-2">
+            From <strong>mega bases</strong> to <strong>speed runs</strong>, from <strong>challenge videos</strong> to full <strong>survival series</strong> — I put everything into my content. Every video is made with the community in mind.
+          </p>
+
+          <p class="reveal delay-3">
+            If you're a fellow Minecraft fan, a casual viewer, or just here to vibe — welcome. Hit that subscribe button and let's go explore some blocks together.
+          </p>
+
+          <div class="content-types reveal delay-3">
+            <span class="tag tag-cyan">⛏ Builds</span>
+            <span class="tag tag-blue">🎯 Survival</span>
+            <span class="tag tag-green">⚡ Speedruns</span>
+            <span class="tag tag-purple">💀 Challenges</span>
+            <span class="tag tag-cyan">🗺 Exploration</span>
+            <span class="tag tag-blue">🏆 Competitions</span>
+          </div>
+
+          <div class="reveal delay-4" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;" id="aboutBtns">
+            <!-- JS injected -->
+          </div>
+        </div>
+
+        <!-- RIGHT: Info + Timeline -->
+        <div>
+          <div class="card reveal delay-2" style="margin-bottom:24px;">
+            <h3 style="font-family:var(--font-display);font-size:1.1rem;color:#fff;margin-bottom:20px;">Quick Info</h3>
+            <ul class="info-list" id="infoList">
+              <!-- JS injected -->
+            </ul>
+          </div>
+
+          <div class="card reveal delay-3">
+            <h3 style="font-family:var(--font-display);font-size:1.1rem;color:#fff;margin-bottom:24px;">My Journey</h3>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-year">2022</div>
+                <div class="timeline-title">Started Creating 🚀</div>
+                <p class="timeline-desc">Posted my first Minecraft video and fell in love with content creation.</p>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-year">2023</div>
+                <div class="timeline-title">Hit 10K Subs 🎉</div>
+                <p class="timeline-desc">The community started growing — launched my survival series which blew up.</p>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-year">2024</div>
+                <div class="timeline-title">TikTok Takeover 📱</div>
+                <p class="timeline-desc">Expanded to TikTok. Short-form clips brought in a whole new audience.</p>
+              </div>
+              <div class="timeline-item" style="margin-bottom:0;">
+                <div class="timeline-year">2025 — NOW</div>
+                <div class="timeline-title">50K+ & Growing 🔥</div>
+                <p class="timeline-desc">Bigger builds, better videos, stronger community. Just getting started.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="js/shared.js"></script>
+<script>
+(async () => {
+  await injectNav('About');
+  await injectFooter();
+  initReveal();
+
+  const data = await loadSiteData();
+  if (!data) return;
+
+  document.getElementById('longBio').textContent = data.creator.longBio;
+
+  document.getElementById('aboutBtns').innerHTML = `
+    <a href="${data.socials.youtube.url}" target="_blank" class="btn btn-yt">▶ YouTube</a>
+    <a href="${data.socials.tiktok.url}" target="_blank" class="btn btn-tt">♪ TikTok</a>
+  `;
+
+  document.getElementById('infoList').innerHTML = `
+    <li><span class="info-icon">🎮</span><div><span class="info-label">Creator Name</span><span class="info-value">${data.creator.name}</span></div></li>
+    <li><span class="info-icon">🎬</span><div><span class="info-label">Role</span><span class="info-value">${data.creator.tagline}</span></div></li>
+    <li><span class="info-icon">📅</span><div><span class="info-label">Creating Since</span><span class="info-value">${data.creator.started}</span></div></li>
+    <li><span class="info-icon">📍</span><div><span class="info-label">Location</span><span class="info-value">${data.creator.location}</span></div></li>
+    <li><span class="info-icon">📺</span><div><span class="info-label">YouTube</span><span class="info-value">${data.socials.youtube.handle}</span></div></li>
+    <li><span class="info-icon">♪</span><div><span class="info-label">TikTok</span><span class="info-value">${data.socials.tiktok.handle}</span></div></li>
+  `;
+})();
+</script>
+</body>
+</html>
